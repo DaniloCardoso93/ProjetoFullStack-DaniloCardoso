@@ -30,6 +30,6 @@ export const loginUserService = async (req:ILogin) =>{
         }
     )
 
-    return {token}
+    return {token, userId:user.id}
 
 }
