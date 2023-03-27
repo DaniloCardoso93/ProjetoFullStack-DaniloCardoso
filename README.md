@@ -2,6 +2,19 @@
 
 ## Documentação da API
 
+Esse projeto foi feito baseado no PostGreSQL, junto com express e typeORM.
+Para utiliza-lo é necessario que o servidor esteja rodando em sua maquina ou em algum outro host, tendo que atribuir as váriaves dentro de um arquivo .env com as chaves proposta no env.example.
+Use os comandos:
+yarn -> para instalar todos as dependencias
+npm run typeorm migration:run -- -d ./src/data-source/ -> para rodar as migrations
+yarn dev -> para rodar o servidor 
+
+
+
+
+
+
+
 #### ROTAS QUE NÃO PRECISAM DE AUTENTICAÇÃO
 
 Login

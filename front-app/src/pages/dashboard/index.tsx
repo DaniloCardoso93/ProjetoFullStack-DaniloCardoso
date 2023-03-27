@@ -76,7 +76,6 @@ function Dashboard({id, token}:IId){
     )
 }
 
-// openDeleteModal
 
 
 export const getServerSideProps:GetServerSideProps = async(ctx)=>{
