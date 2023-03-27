@@ -7,13 +7,13 @@ Para utiliza-lo é necessario que o servidor esteja rodando em sua maquina ou em
 
 Use os comandos:
 ```
-yarn -> para instalar todos as 
+yarn/npm install -> para instalar todos as dependencias
 ```
 ``` 
 npm run typeorm migration:run -- -d ./src/data-source/ -> para rodar as migrations
 ```
 ```
-yarn dev -> para rodar o servidor 
+yarn dev/npm start -> para rodar o servidor 
 ```
 
 
