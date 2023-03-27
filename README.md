@@ -13,7 +13,7 @@ yarn/npm install -> para instalar todos as dependencias
 npm run typeorm migration:run -- -d ./src/data-source/ -> para rodar as migrations
 ```
 ```
-yarn dev/npm start -> para rodar o servidor 
+yarn dev -> para rodar o servidor 
 ```
 
 
