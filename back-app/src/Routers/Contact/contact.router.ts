@@ -9,7 +9,6 @@ const contactRouter = Router()
 contactRouter.post(
     "",
     middleware.validateSchemaMiddleware(createContactShape),
-    middleware.verifyContactExist,
     middleware.ensureAuthMiddleware,
     middleware.verifyAlreadyRegisterContactToUserMiddleware,
     createContactController
