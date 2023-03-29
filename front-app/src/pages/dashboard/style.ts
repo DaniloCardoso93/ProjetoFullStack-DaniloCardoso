@@ -117,11 +117,11 @@ export const UlDashBord = styled.ul`
             margin-right: 30px;
 
             height: 100%;
-            width: 25%;
+            width: 30%;
 
             svg{
                 width: 50px;
-                height: 30px;
+                height: 25px;
                 color: var(--grey0);
                 transition:.5s;
                 cursor: pointer;

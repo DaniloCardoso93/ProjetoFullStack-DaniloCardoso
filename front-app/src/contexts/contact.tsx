@@ -19,6 +19,13 @@ interface IContactProviderProps {
     email: string;
     phoneNumber:string
   }
+
+  
+  interface IContactUpdate {
+    fullName?: string;
+    email?: string;
+    phoneNumber?:string
+  }
   
   interface IContactRegisterResponse {
     id: string;
@@ -38,10 +45,15 @@ interface IContactProviderProps {
     setContact: React.Dispatch<SetStateAction<boolean>>;
     contactRegister(data: IContactRegister): Promise<IContactRegisterResponse>;
     contactDelete(id: string, token:string): Promise<void>;
+    contactUpdate(data:IContactUpdate, id:string): Promise<IContactUpdate>;
     isDeleteModalVisible:boolean;
     setIsDeleteModalVisible: React.Dispatch<SetStateAction<boolean>>;
     openDeleteModal():void;
     closeDeleteModal():void
+    isUpdateModalVisible:boolean;
+    setIsUpdateModalVisible: React.Dispatch<SetStateAction<boolean>>;
+    openUpdateModal():void;
+    closeUpdateModal():void
   }
   
   export const contactContext = createContext<IContactContext>({} as IContactContext);
@@ -49,6 +61,8 @@ interface IContactProviderProps {
   export function ContactProvider({ children }: IContactProviderProps) {
     const [contact, setContact] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
+    const [isUpdateModalVisible, setIsUpdateModalVisible] = useState<boolean>(false);
+
     const {token} = parseCookies()
 
     function openDeleteModal(): void {
@@ -59,13 +73,37 @@ interface IContactProviderProps {
       setIsDeleteModalVisible(false);
     }
 
+    function openUpdateModal(): void {
+      setIsUpdateModalVisible(true);
+    }
+  
+    function closeUpdateModal(): void {
+      setIsUpdateModalVisible(false);
+    }
+
 
   
     async function contactRegister(data: IContactRegister) {
       try {
         api.defaults.headers.common.authorization = `Bearer ${token}`;
         const res = await api.post("/contact", data);
-        SucessToast("Tecnologia cadastrada com sucesso");
+        SucessToast("Contato cadastrado com sucesso");
+        setContact(true);
+        return res.data;
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const erro = error.response?.data.message;
+          ErrorToast(erro);
+          return erro;
+        }
+      }
+    }
+
+    async function contactUpdate(data: IContactUpdate, contactId:string) {
+      try {
+        api.defaults.headers.common.authorization = `Bearer ${token}`;
+        const res = await api.patch(`/contact/${contactId}`, data);
+        SucessToast("Contato atualizado com sucesso");
         setContact(true);
         return res.data;
       } catch (error) {
@@ -101,6 +139,11 @@ interface IContactProviderProps {
         setIsDeleteModalVisible,
         openDeleteModal,
         closeDeleteModal,
+        isUpdateModalVisible,
+        setIsUpdateModalVisible,
+        openUpdateModal,
+        closeUpdateModal,
+        contactUpdate,
         }}>
         {children}
       </contactContext.Provider>

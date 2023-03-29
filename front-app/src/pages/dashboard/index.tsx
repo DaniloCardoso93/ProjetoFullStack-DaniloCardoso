@@ -1,5 +1,5 @@
 import { HeaderLogged } from "@/components/Header";
-import { DeleteContactModal, RegisterContactModal } from "@/components/Modal";
+import { DeleteContactModal, RegisterContactModal, UpdateContactModal } from "@/components/Modal";
 import api from "@/services/api";
 import { GetServerSideProps } from "next";
 import nookies from "nookies"
@@ -8,6 +8,8 @@ import { useContactContext } from "@/contexts/contact";
 import { useClientContext } from "@/contexts/user";
 import { BodyDashbord, Div, NoContacts, PerfilDiv, UlDashBord } from "../../pages/dashboard/style";
 import { BsPlusSquareFill, BsTrash } from "react-icons/bs";
+import { BiEditAlt } from "react-icons/bi"
+
 
 
 
@@ -19,7 +21,13 @@ interface IId{
 
 function Dashboard({id, token}:IId){
     const { user, isModalVisible, openModal, PerfilRequest, setLoading } = useClientContext();
-    const { setContact, contact, openDeleteModal, isDeleteModalVisible } = useContactContext();
+    const { setContact,
+        contact,
+        openDeleteModal, 
+        isDeleteModalVisible,
+        isUpdateModalVisible,
+        openUpdateModal,
+        } = useContactContext();
     const [isForModal, setIsForModal] = useState<string>()
 
     useEffect(() => {
@@ -44,6 +52,7 @@ function Dashboard({id, token}:IId){
         <Div>
             {isModalVisible ? <RegisterContactModal /> : null}
             {isDeleteModalVisible ? <DeleteContactModal contactId={isForModal}/> : null}
+            {isUpdateModalVisible ? <UpdateContactModal contactId={isForModal}/> : null}
 
             <PerfilDiv>           
                 <h1>Olá, {user?.fullName}</h1>
@@ -63,6 +72,10 @@ function Dashboard({id, token}:IId){
                         <BsTrash id={contact.id} onClick={()=>{
                             setIsForModal(contact.id)
                             openDeleteModal()
+                        }}/>
+                        <BiEditAlt id={contact.id} onClick={()=>{
+                            setIsForModal(contact.id)
+                            openUpdateModal()
                         }}/>
                     </div>
                 </li>
@@ -87,7 +100,6 @@ export const getServerSideProps:GetServerSideProps = async(ctx)=>{
             const { data } = await api.get(`/users/${cookies.userId}`)
 
         } catch (error) {
-            // console.log(error.response.data.message)
             return {
                 redirect:{
                     destination:"/",

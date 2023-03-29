@@ -6,9 +6,10 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContactContext } from "@/contexts/contact";
 import { useClientContext } from "@/contexts/user";
-import { ContactRegister } from "@/validate";
+import { ContactRegister, updateRegister } from "@/validate";
 import {DeleteButton} from "@/styles/button"
 import { parseCookies } from "nookies";
+import { pickBy } from "lodash";
 
 interface IData {
   fullName: string;
@@ -135,6 +136,82 @@ export function DeleteContactModal({contactId}: any) {
           <DeleteButton onClick={deleteUser}>Deletar Perfil</DeleteButton>
         </DivDeleteContactModal>
       </DivDeleteClientModal>
+    </BgModal>
+  );
+}
+
+
+interface IDataUpdate {
+  fullName?: string;
+  email?: string;
+  phoneNumber?:string
+}
+
+
+export function UpdateContactModal({contactId}: any) {
+  const { closeUpdateModal, contactUpdate } = useContactContext();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IDataUpdate>({
+    resolver: yupResolver(updateRegister),
+  });
+
+  const onSubmit = async (data: IDataUpdate) => {
+    const validatedData = pickBy(data, value=>value!.length>0)
+    const res = await contactUpdate(validatedData, contactId)
+    if (res) {
+      closeUpdateModal();
+    }
+  };
+
+  return (
+    <BgModal>
+      <DivModal>
+        <TitleModal>
+          <p>Editar contato</p>
+          <span onClick={closeUpdateModal}>X</span>
+        </TitleModal>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="">
+            Nome Completo
+            <Input
+              type="text"
+              id="fullName"
+              placeholder="Digite o nome completo"
+              {...register("fullName")}
+            />
+          </label>
+          <p>{errors.fullName?.message}</p>
+
+          <label htmlFor="">
+            Email
+            <Input
+              type="text"
+              id="email"
+              placeholder="Digite o Email"
+              {...register("email")}
+            />
+          </label>
+          <p>{errors.email?.message}</p>
+
+          <label htmlFor="">
+            Número de telefone
+            <Input
+              type="text"
+              id="phoneNumber"
+              placeholder="Digite o Número de telefone"
+              {...register("phoneNumber")}
+            />
+          </label>
+          <p>{errors.phoneNumber?.message}</p>
+
+
+          <PrimaryButton>Editar Contato</PrimaryButton>
+        </Form>
+      </DivModal>
     </BgModal>
   );
 }

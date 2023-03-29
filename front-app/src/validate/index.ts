@@ -23,3 +23,18 @@ export const ContactRegister = yup.object({
     email: yup.string().email("Deve ser uma email válido").required("Email é obrigatório"),
     phoneNumber: yup.string().required("Número de telefone com ddd ex:(21)123456789"),
 })
+
+export const updateSchema = yup.object({
+  fullName: yup.string().notRequired(),
+  email: yup.string().email("Deve ser uma email válido").notRequired(),
+  password: yup.string().notRequired(),
+  confirmPassword: yup.string().oneOf([yup.ref('password')], 'Confirmação de senha deve ser igual a senha'),
+  phoneNumber: yup.string().notRequired(),
+})
+
+
+export const updateRegister = yup.object({
+  fullName: yup.string().notRequired(),
+  email: yup.string().email("Deve ser uma email válido").notRequired(),
+  phoneNumber: yup.string().notRequired(),
+})

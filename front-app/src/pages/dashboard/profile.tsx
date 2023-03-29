@@ -11,13 +11,14 @@ import { Div, PerfilDiv, BodyDashbord } from "@/pages/dashboard/style"
 import { DeleteButton, PrimaryButton } from "@/styles/button"
 import { Form } from "@/styles/form"
 import { LoginInput } from "@/styles/input"
-import { RegisterSchema } from "@/validate"
+import { updateSchema } from "@/validate"
 import { yupResolver } from "@hookform/resolvers/yup"
 import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { DivFormLogin } from "@/components/Form/FormLogin/style"
 import { useRouter } from "next/router"
 import { DeleteClientModal } from "@/components/Modal"
+import { pickBy } from "lodash"
 
 
 interface IDataupdate{
@@ -42,14 +43,14 @@ function Profile({id, token}:IId){
         handleSubmit,
         formState: { errors },
       } = useForm<IDataupdate>({
-        resolver: yupResolver(RegisterSchema),
+        resolver: yupResolver(updateSchema),
       });
 
       const onSubmit = async (data:IDataupdate):Promise<void>=>{
+        const validatedData = pickBy(data, value =>value!.length > 0)
         try {
             api.defaults.headers.common.authorization = `Bearer ${token}}`
-            const res = await api.patch(`/users/${id}`, data)
-            console.log(res)
+            const res = await api.patch(`/users/${id}`, validatedData)
             router.push("/dashboard")           
         } catch (error:any) {
             console.log(error.response.data.message)
