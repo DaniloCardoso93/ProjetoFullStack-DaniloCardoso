@@ -97,7 +97,7 @@ function RegisterForm(){
                 <p>{errors.confirmPassword?.message}</p>
 
                 <label htmlFor="phoneNumber">
-                Confirmar senha
+                Telefone
                 <Input
                     id="phoneNumber"
                     type="phoneNumber"
